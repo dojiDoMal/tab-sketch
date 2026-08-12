@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="acordes.js"></script>
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #333;
+            font-family: sans-serif;
+        }
+
+        .fretboard {
+            padding-top: 2px;
+            display: flex;
+            flex-direction: column;
+            width: 55px;
+            height: 72px;
+            background-color: white;
+        }
+
+        .casa {
+            width: 55px;
+            border-bottom: 1px solid white;
+            justify-content: center;
+            display: flex;
+        }
+
+        #casa-5 {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            width: 55px;
+        }
+
+        .corda {
+            background-color: #333;
+            width: 11px;
+            height: 14px;
+            box-sizing: border-box;
+            border-right: 1px solid white;
+        }
+
+        .corda-last {
+            background-color: #333;
+            width: 10px;
+            height: 14px;
+        }
+
+        .fade {
+            top: 10px;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, #333);
+            pointer-events: none;
+        }
+
+        .label-wrapper {
+            display: flex;
+            position: relative;
+        }
+
+        .label {
+            position: absolute;
+            background-color: white;
+            border-radius: 100px;
+            font-size: 9px;
+            font-weight: 700;
+            width: 10px;
+            height: 10px;
+            text-align: center;
+        }
+
+        .label-bar {
+            position: absolute;
+            background-color: white;
+            border-radius: 100px;
+            font-size: 9px;
+            font-weight: 700;
+            height: 6px;
+            text-align: center;
+        }
+
+        .chord-name {
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .container .chord-name {
+            display: flex;
+            justify-content: center;
+            width: 55px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+
+        <div class="container"><label class="chord-name"></label></div>
+        <div class="fretboard">
+            <div id="casa-1" class="casa">
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda-last"></div>
+            </div>
+            <div id="casa-2" class="casa">
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda-last"></div>
+            </div>
+            <div id="casa-3" class="casa">
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda-last"></div>
+            </div>
+            <div id="casa-4" class="casa">
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda-last"></div>
+            </div>
+            <div id="casa-5">
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda"></div>
+                <div class="corda-last"></div>
+                <div class="fade"></div>
+            </div>
+
+            <div id="strings-row" style="position: relative; width: 55px; height: 8px;"></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        const cordas = { e: -5, B: -15, G: -26, D: -37, A: -48, E: -59 };
+        const casas = {
+            1: document.querySelector('#casa-1'),
+            2: document.querySelector('#casa-2'),
+            3: document.querySelector('#casa-3'),
+            4: document.querySelector('#casa-4'),
+            5: document.querySelector('#casa-5'),
+        };
+
+        function createLabel(acorde) {
+
+            const { type, text, casa, corda } = acorde
+
+            const x = cordas[corda];
+            const y = -8;
+            const barY = y + 3;
+
+
+            const p = document.createElement('p');
+            if (type != 'bar') {
+                p.textContent = text;
+                p.className = 'label';
+                p.style.top = `${y}px`;
+                p.style.left = `${x}px`;
+            } else {
+                const barWidth = Math.abs(cordas[acorde.cordaFim] - cordas[acorde.cordaInicio]) + 8;
+                const barX = cordas[acorde.cordaFim] + 1;
+                p.className = 'label-bar';
+                p.style.top = `${barY}px`;
+                p.style.left = `${barX}px`;
+                p.style.width = `${barWidth}px`;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'label-wrapper';
+            div.appendChild(p);
+
+            casas[casa].appendChild(div);
+        }
+
+        const stringPositions = [-1.5, 9.1, 19.8, 30.5, 41.2, 51.9];
+
+        function renderStrings(strings) {
+            const row = document.querySelector('#strings-row');
+            row.innerHTML = '';
+            strings.forEach((state, i) => {
+                const el = document.createElement('div');
+                el.style.position = 'absolute';
+                el.style.top = '1.5px';
+                el.style.left = `${stringPositions[i]}px`;
+                if (state === 'x') {
+                    el.style.color = 'white';
+                    el.style.fontWeight = '700';
+                    el.style.fontSize = '8px';
+                    el.style.lineHeight = '8px';
+                    el.style.width = '4px';
+                    el.style.textAlign = 'center';
+                    el.style.top = '0px';
+                    el.textContent = '×';
+                } else {
+                    el.style.borderRadius = '100px';
+                    el.style.width = '4px';
+                    el.style.height = '5px';
+                    el.style.backgroundColor = state === 'bass' ? 'white' : '';
+                    el.style.boxShadow = state === 'open' ? 'inset 0 0 0 1px white' : '';
+                }
+                row.appendChild(el);
+            });
+        }
+
+        function renderAcorde(nome, variacao = 0) {
+            Object.values(casas).forEach(casa => casa.querySelectorAll('.label-wrapper').forEach(el => el.remove()));
+            const chordTitle = document.querySelector('.chord-name');
+            chordTitle.textContent = acordes[nome][variacao].metadata.name;
+            renderStrings(acordes[nome][variacao].metadata.strings);
+            acordes[nome][variacao].shape.forEach((acorde) => createLabel(acorde));
+        }
+
+        const listaAcordes = [
+            'A',
+            'G',
+            'C',
+            'Em',
+            'F',
+            'Bm',
+            'D#',
+            'Dm',
+            'E'
+        ]
+
+        let i = 0;
+        setInterval(() => {
+            renderAcorde(listaAcordes[i]);
+            i = (i + 1) % listaAcordes.length;
+        }, 2000);
+
+    </script>
+
+</body>
+
+</html>
