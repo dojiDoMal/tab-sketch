@@ -1,0 +1,38 @@
+{
+  "name": "tab-sketch",
+  "version": "0.1.0",
+  "description": "Simple HTML/CSS guitar chord diagram renderer",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./chords": "./src/chords.js",
+    "./styles.css": "./src/styles.css"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "keywords": [
+    "guitar",
+    "chord",
+    "tab",
+    "diagram",
+    "fretboard",
+    "html"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "storybook": "8.6.18",
+    "@storybook/html": "8.6.18",
+    "@storybook/html-vite": "8.6.18",
+    "@storybook/addon-essentials": "8.6.18",
+    "@storybook/blocks": "8.6.18",
+    "@storybook/test": "8.6.18",
+    "@storybook/addon-interactions": "8.6.18"
+  }
+}

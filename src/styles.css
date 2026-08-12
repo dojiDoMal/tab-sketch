@@ -1,0 +1,84 @@
+.tab-sketch .fretboard {
+    padding-top: 2px;
+    display: flex;
+    flex-direction: column;
+    width: 55px;
+    height: 72px;
+    background-color: white;
+}
+
+.tab-sketch .casa {
+    width: 55px;
+    border-bottom: 1px solid white;
+    justify-content: center;
+    display: flex;
+}
+
+.tab-sketch .casa-last {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 55px;
+}
+
+.tab-sketch .corda {
+    background-color: #333;
+    width: 11px;
+    height: 14px;
+    box-sizing: border-box;
+    border-right: 1px solid white;
+}
+
+.tab-sketch .corda-last {
+    background-color: #333;
+    width: 10px;
+    height: 14px;
+}
+
+.tab-sketch .fade {
+    top: 10px;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, var(--tab-sketch-bg, #333));
+    pointer-events: none;
+}
+
+.tab-sketch .label-wrapper {
+    display: flex;
+    position: relative;
+}
+
+.tab-sketch .label {
+    position: absolute;
+    background-color: white;
+    border-radius: 100px;
+    font-size: 9px;
+    font-weight: 700;
+    width: 10px;
+    height: 10px;
+    text-align: center;
+}
+
+.tab-sketch .label-bar {
+    position: absolute;
+    background-color: white;
+    border-radius: 100px;
+    font-size: 9px;
+    font-weight: 700;
+    height: 6px;
+    text-align: center;
+}
+
+.tab-sketch .chord-name {
+    color: white;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: center;
+    width: 55px;
+}
+
+.tab-sketch .strings-row {
+    position: relative;
+    width: 55px;
+    height: 8px;
+}
