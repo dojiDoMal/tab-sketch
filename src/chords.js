@@ -40,6 +40,32 @@ export const chords = {
       { text: '3', casa: 3, corda: 'A' },
     ],
   }],
+  'F/C': [{
+    metadata: {
+      name: 'F/C',
+      variant: 0,
+      strings: ['x', 'bass', 'open', 'open', 'open', 'x']
+    },
+    shape: [
+      { text: '1', casa: 1, corda: 'B' },
+      { text: '2', casa: 2, corda: 'G' },
+      { text: '4', casa: 3, corda: 'D' },
+      { text: '3', casa: 3, corda: 'A' },
+    ],
+  },
+  {
+    metadata: {
+      name: 'F/C',
+      variant: 1,
+      strings: ['x', 'bass', 'x', 'open', 'open', 'open']
+    },
+    shape: [
+      { text: '3', casa: 5, corda: 'e' },
+      { text: '4', casa: 6, corda: 'B' },
+      { text: '2', casa: 5, corda: 'G' },
+      { text: '1', casa: 3, corda: 'A' },
+    ],
+  }],
   A: [
     {
       metadata: { name: 'A', variant: 0, strings: ['x', 'bass', 'open', 'open', 'open', 'open'] },
