@@ -1,6 +1,36 @@
 const cordas = { e: -5, B: -15, G: -26, D: -37, A: -48, E: -59 };
 const stringPositions = [-1.5, 9.1, 19.8, 30.5, 41.2, 51.9];
 
+const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+/**
+ * Transposes a chord name by a given number of semitones.
+ * Handles root note and preserves the quality/suffix (m, 7, maj7, etc.)
+ * @param {string} chordName - e.g. "Bm", "F#m7", "D"
+ * @param {number} semitones - number of semitones to transpose (negative = down)
+ * @returns {string} transposed chord name
+ */
+function transposeChord(chordName, semitones) {
+  // Extract root (with optional # or b) and suffix
+  const match = chordName.match(/^([A-G][#b]?)(.*)/);
+  if (!match) return chordName;
+
+  const [, root, suffix] = match;
+
+  // Normalize flats to sharps for lookup
+  let normalizedRoot = root;
+  if (root.endsWith('b')) {
+    const flatIndex = NOTES.indexOf(root[0]);
+    normalizedRoot = NOTES[(flatIndex - 1 + 12) % 12];
+  }
+
+  const rootIndex = NOTES.indexOf(normalizedRoot);
+  if (rootIndex === -1) return chordName;
+
+  const newIndex = (rootIndex + semitones + 120) % 12; // +120 to handle negatives
+  return NOTES[newIndex] + suffix;
+}
+
 function createFretboardHTML(capoFret, { startFret = 1 } = {}) {
   const casas = [1, 2, 3, 4].map(
     (n) => `
@@ -18,7 +48,7 @@ function createFretboardHTML(capoFret, { startFret = 1 } = {}) {
   const needsFadeTop = capoFret || hasOffset;
   const fadeTopHTML = needsFadeTop ? '<div class="fade-top"></div>' : '';
   const fretIndicatorHTML = hasOffset
-    ? `<span class="fret-indicator">${startFret}</span>`
+    ? `<span class="fret-indicator">${startFret < 10 ? '\u2007' + startFret : startFret}</span>`
     : '';
 
   const fretboardClass = capoFret
@@ -45,6 +75,7 @@ function createFretboardHTML(capoFret, { startFret = 1 } = {}) {
         </div>
         <div class="strings-row"></div>
       </div>
+      <label class="tuning-info"></label>
     </div>
   `;
 }
@@ -132,9 +163,17 @@ function renderStrings(container, strings) {
  * @param {object} chordData - Chord data object with { metadata, shape }
  * @param {object} [options] - Rendering options
  * @param {number} [options.capo] - Capo fret position (e.g. 2 means capo on 2nd fret)
+ * @param {number} [options.tuning] - Tuning offset in semitones relative to standard tuning.
+ *   Negative values mean tuning down (e.g. -2 = 1 tom abaixo).
+ *   When set, displays the real sounding chord below the diagram.
+ *   Example: tuning=-2 with shape "Bm" shows "Am com forma de Bm".
+ * @param {string} [options.titleColor] - Custom color for the chord name title (e.g. '#ff0', 'red').
  */
 export function renderChord(container, chordData, options = {}) {
   const capo = options.capo && options.capo > 0 ? options.capo : undefined;
+  const tuning = typeof options.tuning === 'number' && options.tuning !== 0
+    ? options.tuning
+    : undefined;
 
   // Calculate fret offset: if the lowest fret is > 4, shift so it starts at 1
   const frets = chordData.shape.map((s) => s.casa);
@@ -148,7 +187,24 @@ export function renderChord(container, chordData, options = {}) {
 
   const root = container.querySelector('.tab-sketch');
   const chordTitle = root.querySelector('.chord-name');
-  chordTitle.textContent = capo ? `${chordData.metadata.name}*` : chordData.metadata.name;
+  chordTitle.textContent = (capo || tuning) ? `${chordData.metadata.name}*` : chordData.metadata.name;
+  if (options.titleColor) {
+    chordTitle.style.color = options.titleColor;
+  }
+
+  // Tuning info: capo adds semitones (+), tuning offsets (can be negative)
+  const tuningLabel = root.querySelector('.tuning-info');
+  const totalOffset = (capo || 0) + (tuning || 0);
+  if (totalOffset !== 0) {
+    const shapeName = chordData.metadata.name;
+    const realChord = transposeChord(shapeName, totalOffset);
+    const tuningText = `${realChord} com forma de ${shapeName}`;
+    tuningLabel.innerHTML = `<b>${realChord}</b> com forma de <b>${shapeName}</b>`;
+    container.setAttribute('title', tuningText);
+  } else {
+    tuningLabel.textContent = '';
+    container.removeAttribute('title');
+  }
 
   renderStrings(root, chordData.metadata.strings);
   chordData.shape.forEach((item) => createLabel(root, item, fretOffset));

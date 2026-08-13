@@ -3,7 +3,11 @@
 }
 
 .tab-sketch {
-    margin: 10px
+    width: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .tab-sketch .fretboard {
@@ -92,11 +96,12 @@
 .tab-sketch .label-bar {
     position: absolute;
     background-color: white;
-    border-radius: 100px;
+    border-radius: 2px;
     font-size: 9px;
     font-weight: 700;
     height: 6px;
     text-align: center;
+    z-index: 9;
 }
 
 .tab-sketch .chord-name {
@@ -179,7 +184,7 @@
 
 .tab-sketch .fret-indicator {
     position: absolute;
-    left: -14px;
+    left: -16px;
     top: 3px;
     font-size: 9px;
     font-weight: 700;
@@ -187,11 +192,25 @@
     z-index: 1;
 }
 
+.tab-sketch .tuning-info {
+    color: #aaa;
+    display: none;
+    max-width: 5rem;
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.tab-sketch-container:hover .tuning-info {
+    display: block;
+}
+
 .tab-sketch-container {
+    padding: 16px 8px;
     border-radius: 8px;
-    padding: 16px;
+    width: fit-content;
 }
 
 .tab-sketch-container:hover {
-    background-color: #222;
+    background-color: color-mix(in srgb, transparent, #fff 8%);
 }
