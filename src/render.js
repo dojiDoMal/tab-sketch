@@ -60,6 +60,7 @@ function createFretboardHTML(capoFret, { startFret = 1 } = {}) {
   return `
     <div class="tab-sketch">
       <label class="chord-name"></label>
+      <label class="tuning-info"></label>
       ${capoHTML}
       <div class="${fretboardClass}">
         ${fadeTopHTML}
@@ -75,7 +76,6 @@ function createFretboardHTML(capoFret, { startFret = 1 } = {}) {
         </div>
         <div class="strings-row"></div>
       </div>
-      <label class="tuning-info"></label>
     </div>
   `;
 }
@@ -126,6 +126,7 @@ function createLabel(container, acorde, fretOffset) {
   div.appendChild(p);
 
   const casaEl = container.querySelector(`[data-casa="${displayCasa}"]`);
+  if (!casaEl) return;
   casaEl.appendChild(div);
 }
 
@@ -182,28 +183,36 @@ export function renderChord(container, chordData, options = {}) {
   const fretOffset = maxFret > 5 ? minFret - 1 : 0;
   const startFret = fretOffset > 0 ? fretOffset + 1 + (capo || 0) : 0;
 
-  container.innerHTML = createFretboardHTML(capo, { startFret });
-  container.classList.add('tab-sketch-container');
+  container.classList.add('tab-sketch-wrapper');
 
-  const root = container.querySelector('.tab-sketch');
+  const inner = document.createElement('div');
+  inner.innerHTML = createFretboardHTML(capo, { startFret });
+  inner.classList.add('tab-sketch-container');
+  container.innerHTML = '';
+  container.appendChild(inner);
+
+  const shapeName = chordData.metadata.name;
+  const totalOffset = (capo || 0) + (tuning || 0);
+  const realChord = transposeChord(shapeName, totalOffset);
+
+  const root = inner.querySelector('.tab-sketch');
   const chordTitle = root.querySelector('.chord-name');
-  chordTitle.textContent = (capo || tuning) ? `${chordData.metadata.name}*` : chordData.metadata.name;
+  chordTitle.textContent = (totalOffset !== 0) ? `${realChord}*` : chordData.metadata.name;
   if (options.titleColor) {
     chordTitle.style.color = options.titleColor;
   }
 
   // Tuning info: capo adds semitones (+), tuning offsets (can be negative)
   const tuningLabel = root.querySelector('.tuning-info');
-  const totalOffset = (capo || 0) + (tuning || 0);
   if (totalOffset !== 0) {
-    const shapeName = chordData.metadata.name;
-    const realChord = transposeChord(shapeName, totalOffset);
     const tuningText = `${realChord} com forma de ${shapeName}`;
-    tuningLabel.innerHTML = `<b>${realChord}</b> com forma de <b>${shapeName}</b>`;
-    container.setAttribute('title', tuningText);
+    //tuningLabel.innerHTML = `<b>${realChord}</b> com forma de <b>${shapeName}</b>`;
+    tuningLabel.innerHTML = `forma de <b>${shapeName}</b>`;
+    tuningLabel.style.marginBottom = '8px'
+    inner.setAttribute('title', tuningText);
   } else {
     tuningLabel.textContent = '';
-    container.removeAttribute('title');
+    inner.removeAttribute('title');
   }
 
   renderStrings(root, chordData.metadata.strings);

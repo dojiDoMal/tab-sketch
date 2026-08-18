@@ -1,3 +1,4 @@
+
 // Shape templates for minor chords (offsets relative to the bar/root fret)
 const minorShapes = {
   // Am shape: bar parcial (A→e), dedos em D, G, B
@@ -31,36 +32,151 @@ const minorShapes = {
   },
 };
 
+const minorSeventhShapes = {
+  Am7: {
+    strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
+    shape: [
+      { type: 'bar', cordaInicio: 'e', cordaFim: 'A', offset: 0 },
+      { text: '3', corda: 'D', offset: 2 },
+      { text: '2', corda: 'B', offset: 1 },
+    ],
+  },
+  Em7: {
+    strings: ['bass', 'open', 'open', 'open', 'open', 'open'],
+    shape: [
+      { type: 'bar', cordaInicio: 'e', cordaFim: 'E', offset: 0 },
+      { text: '3', corda: 'A', offset: 2 },
+    ],
+  },
+  'D#m7': {
+    strings: ['x', 'x', 'bass', 'open', 'open', 'open'],
+    shape: [
+      { text: '1', corda: 'D', offset: 1 },
+      { text: '4', corda: 'G', offset: 3 },
+      { text: '2', corda: 'B', offset: 2 },
+      { text: '3', corda: 'e', offset: 2 },
+    ],
+  },
+  Cm7: { // Todo: na verdade esse shape é Xm7(9)
+    strings: ['x', 'bass', 'open', 'open', 'open', 'x'],
+    shape: [
+      { text: '2', corda: 'A', offset: 3 },
+      { text: '1', corda: 'D', offset: 1 },
+      { text: '3', corda: 'G', offset: 3 },
+      { text: '4', corda: 'B', offset: 3 },
+    ],
+  },
+  Gm7: {
+    strings: ['bass', 'open', 'open', 'open', 'x', 'x'],
+    shape: [
+      { text: '2', corda: 'E', offset: 3 },
+      { text: '1', corda: 'A', offset: 1 },
+      { text: '3', corda: 'D', offset: 3 },
+      { text: '4', corda: 'G', offset: 3 },
+    ],
+  }
+};
+
 // Shape templates for 9th chords
 const ninthShapes = {
-  // D9 shape: bass em D, dedos em G(+2), B(+3), e aberta
   D9: {
     strings: ['x', 'x', 'bass', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'D', offset: 0 },
-      { text: '1', corda: 'G', offset: 2 },
-      { text: '2', corda: 'B', offset: 3 },
+      { text: '2', corda: 'G', offset: 2 },
+      { text: '3', corda: 'B', offset: 3 },
     ],
   },
-  // E9 shape: bar completo (E→e), dedos em A(+2), G(+1), D(+4)
   E9: {
     strings: ['bass', 'open', 'open', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'E', offset: 0 },
-      { text: '1', corda: 'G', offset: 1 },
-      { text: '2', corda: 'A', offset: 2 },
-      { text: '3', corda: 'D', offset: 4 },
+      { text: '2', corda: 'G', offset: 1 },
+      { text: '3', corda: 'A', offset: 2 },
+      { text: '4', corda: 'D', offset: 4 },
     ],
   },
   A9: {
     strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'A', offset: 0 },
-      { text: '1', corda: 'D', offset: 2 },
-      { text: '2', corda: 'G', offset: 2 },
+      { text: '2', corda: 'D', offset: 2 },
+      { text: '3', corda: 'G', offset: 2 },
     ],
   },
 };
+
+// Shape templates for maj7/bass chords (root on A string)
+const maj7BassShapes = {
+  // X7M shape variant 0: A(0), D(0), G(-1), B(-2)
+  X7M_A0: {
+    strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
+    shape: [
+      { text: '3', corda: 'A', offset: 3 },
+      { text: '4', corda: 'D', offset: 3 },
+      { text: '2', corda: 'G', offset: 2 },
+      { text: '1', corda: 'B', offset: 1 },
+    ],
+  },
+  // X7M shape variant 1: G(0), A(+1), D(+1), B(+3) — rootFret = casa do G
+  X7M_A1: {
+    strings: ['x', 'bass', 'open', 'open', 'open', 'x'],
+    shape: [
+      { text: '1', corda: 'G', offset: 0 },
+      { text: '2', corda: 'A', offset: 1 },
+      { text: '3', corda: 'D', offset: 1 },
+      { text: '4', corda: 'B', offset: 3 },
+    ],
+  },
+};
+
+const MAJ7_ROOT_OFFSETS = { X7M_A0: 0, X7M_A1: -1 };
+
+function buildMaj7SlashChord(name, rootFret) {
+  return ['X7M_A0', 'X7M_A1'].map((templateKey, i) => {
+    const template = maj7BassShapes[templateKey];
+    const base = rootFret + MAJ7_ROOT_OFFSETS[templateKey];
+    return {
+      metadata: { name, variant: i, strings: template.strings },
+      shape: template.shape.map(({ offset, ...rest }) => ({ ...rest, casa: base + offset })),
+    };
+  });
+}
+
+// Special shapes: absolute fret positions, outside CAGED system
+const specialShapes = {
+  A: {
+    strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
+    shape: [
+      { type: 'bar', cordaInicio: 'B', cordaFim: 'D', offset: 2 },
+    ],
+  },
+  G: {
+    strings: ['bass', 'open', 'open', 'open', 'open', 'open'],
+    shape: [
+      { text: '2', corda: 'E', offset: 3 },
+      { text: '1', corda: 'A', offset: 2 },
+      { text: '3', corda: 'B', offset: 3 },
+      { text: '4', corda: 'e', offset: 3 },
+    ],
+  },
+  C9: {
+    strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
+    shape: [
+      { text: '2', corda: 'A', offset: 3 },
+      { text: '1', corda: 'D', offset: 2 },
+      { text: '3', corda: 'B', offset: 3 },
+      { text: '4', corda: 'e', offset: 3 },
+    ],
+  },
+};
+
+function buildSpecialChord(name, template, variantIndex) {
+  return {
+    metadata: { name, variant: variantIndex, strings: template.strings },
+    shape: template.shape.map(({ offset, ...rest }) => ({ ...rest, casa: offset })),
+  };
+}
 
 // Shape templates for major chords
 const majorShapes = {
@@ -69,249 +185,187 @@ const majorShapes = {
     strings: ['bass', 'open', 'open', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'E', offset: 0 },
-      { text: '1', corda: 'G', offset: 1 },
-      { text: '2', corda: 'A', offset: 2 },
-      { text: '3', corda: 'D', offset: 2 },
+      { text: '2', corda: 'G', offset: 1 },
+      { text: '3', corda: 'A', offset: 2 },
+      { text: '4', corda: 'D', offset: 2 },
     ],
   },
   A: {
     strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'A', offset: 0 },
-      { text: '1', corda: 'D', offset: 2 },
-      { text: '2', corda: 'G', offset: 2 },
-      { text: '3', corda: 'B', offset: 2 },
+      { text: '2', corda: 'D', offset: 2 },
+      { text: '3', corda: 'G', offset: 2 },
+      { text: '4', corda: 'B', offset: 2 },
     ],
   },
   D: {
     strings: ['x', 'x', 'bass', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'D', offset: 0 },
-      { text: '1', corda: 'G', offset: 2 },
-      { text: '3', corda: 'B', offset: 3 },
-      { text: '2', corda: 'e', offset: 2 },
+      { text: '2', corda: 'G', offset: 2 },
+      { text: '4', corda: 'B', offset: 3 },
+      { text: '3', corda: 'e', offset: 2 },
+    ],
+  },
+  C: {
+    strings: ['x', 'bass', 'open', 'open', 'open', 'open'],
+    shape: [
+      { type: 'bar', cordaInicio: 'e', cordaFim: 'G', offset: 0 },
+      { text: '2', corda: 'B', offset: 1 },
+      { text: '3', corda: 'D', offset: 2 },
+      { text: '4', corda: 'A', offset: 3 },
     ],
   },
   G: {
     strings: ['bass', 'open', 'open', 'open', 'open', 'open'],
     shape: [
       { type: 'bar', cordaInicio: 'e', cordaFim: 'D', offset: 0 },
-      { text: '2', corda: 'E', offset: 3 },
-      { text: '1', corda: 'A', offset: 2 },
-      { text: '3', corda: 'e', offset: 3 },
+      { text: '3', corda: 'E', offset: 3 },
+      { text: '2', corda: 'A', offset: 2 },
+      { text: '4', corda: 'e', offset: 3 },
     ],
   },
 };
 
 /**
  * Builds chord variants from shape templates + fret offset.
- * Output format is identical to manually declared chords.
+ * When fret === 0, the bar is omitted and finger numbers are decremented by 1.
  */
 function buildChord(name, variants) {
   return variants.map((v, i) => {
-    const template = minorShapes[v.template] || majorShapes[v.template] || ninthShapes[v.template];
+    const template = minorShapes[v.template] || minorSeventhShapes[v.template] || majorShapes[v.template] || ninthShapes[v.template];
+    const isOpen = v.fret === 0;
+    const hasBar = template.shape.some(s => s.type === 'bar');
     return {
       metadata: { name, variant: i, strings: template.strings },
-      shape: template.shape.map(({ offset, ...rest }) => ({
-        ...rest,
-        casa: v.fret + offset,
-      })),
+      shape: template.shape
+        .filter(s => !(isOpen && s.type === 'bar'))
+        .map(({ offset, ...rest }) => ({
+          ...rest,
+          ...(isOpen && hasBar && rest.text ? { text: String(Number(rest.text) - 1) } : {}),
+          casa: v.fret + offset,
+        })),
     };
   });
 }
 
+// rootFret = fret do template E para aquele acorde
+const MAJOR_OFFSETS = [
+  { template: 'E', offset: 0 },
+  { template: 'D', offset: 2 },
+  { template: 'G', offset: 9 },
+  { template: 'A', offset: 7 },
+  { template: 'C', offset: 4 },
+];
+
+function buildMajorChord(name, rootFret) {
+  return buildChord(name, MAJOR_OFFSETS.map(({ template, offset }) => ({
+    template,
+    fret: ((rootFret + offset - 1 + 12) % 12) + 1,
+  })));
+}
+
+// rootFret = semitom da raiz relativo a Am (Am=0, A#=1, B=2, ...)
+const M7_OFFSETS = [
+  { template: 'Am7', offset: 0 },
+  { template: 'Em7', offset: 5 },
+  { template: 'D#m7', offset: 6 },
+  { template: 'Cm7', offset: 9 },
+  { template: 'Gm7', offset: 2 },
+];
+
+function buildMinor7Chord(name, rootFret) {
+  return buildChord(name, M7_OFFSETS.map(({ template, offset }) => {
+    const fret = (rootFret + offset - 1 + 12) % 12 + 1;
+    return { template, fret: fret === 12 ? 0 : fret };
+  }));
+}
+
+const m7Chords = {
+  Am7: buildMinor7Chord('Am7', 12),
+  'A#m7': buildMinor7Chord('A#m7', 1),
+  Bbm7: buildMinor7Chord('Bbm7', 1),
+  Bm7: buildMinor7Chord('Bm7', 2),
+  Cm7: buildMinor7Chord('Cm7', 3),
+  'C#m7': buildMinor7Chord('C#m7', 4),
+  Dbm7: buildMinor7Chord('Dbm7', 4),
+  Dm7: buildMinor7Chord('Dm7', 5),
+  'D#m7': buildMinor7Chord('D#m7', 6),
+  Ebm7: buildMinor7Chord('Ebm7', 6),
+  Em7: buildMinor7Chord('Em7', 7),
+  Fm7: buildMinor7Chord('Fm7', 8),
+  'F#m7': buildMinor7Chord('F#m7', 9),
+  Gbm7: buildMinor7Chord('Gbm7', 9),
+  Gm7: buildMinor7Chord('Gm7', 10),
+  'G#m7': buildMinor7Chord('G#m7', 11),
+  Abm7: buildMinor7Chord('Abm7', 11),
+};
+
+const maj7SlashChords = {
+  'A7M/E': buildMaj7SlashChord('A7M/E', 4),
+  'A#7M/F': buildMaj7SlashChord('A#7M/F', 5),
+  'Bb7M/F': buildMaj7SlashChord('Bb7M/F', 5),
+  'B7M/F#': buildMaj7SlashChord('B7M/F#', 6),
+  'C7M/G': buildMaj7SlashChord('C7M/G', 7),
+  'C#7M/G#': buildMaj7SlashChord('C#7M/G#', 8),
+  'Db7M/Ab': buildMaj7SlashChord('Db7M/Ab', 8),
+  'D7M/A': buildMaj7SlashChord('D7M/A', 9),
+  'D#7M/A#': buildMaj7SlashChord('D#7M/A#', 10),
+  'Eb7M/Bb': buildMaj7SlashChord('Eb7M/Bb', 10),
+  'E7M/B': buildMaj7SlashChord('E7M/B', 11),
+  'F7M/C': buildMaj7SlashChord('F7M/C', 0),
+  'F#7M/C#': buildMaj7SlashChord('F#7M/C#', 1),
+  'Gb7M/Db': buildMaj7SlashChord('Gb7M/Db', 1),
+  'G7M/D': buildMaj7SlashChord('G7M/D', 2),
+  'G#7M/D#': buildMaj7SlashChord('G#7M/D#', 3),
+  'Ab7M/Eb': buildMaj7SlashChord('Ab7M/Eb', 3),
+};
+
+const majorChords = {
+  A: [...buildMajorChord('A', 5), buildSpecialChord('A', specialShapes.A, 5)],
+  'A#': buildMajorChord('A#', 6),
+  Bb: buildMajorChord('Bb', 6),
+  B: buildMajorChord('B', 7),
+  C: buildMajorChord('C', 8),
+  'C#': buildMajorChord('C#', 9),
+  'Db': buildMajorChord('Db', 9),
+  D: buildMajorChord('D', 10),
+  'D#': buildMajorChord('D#', 11),
+  'Eb': buildMajorChord('Eb', 11),
+  E: buildMajorChord('E', 12),
+  F: buildMajorChord('F', 1),
+  'F#': buildMajorChord('F#', 2),
+  Gb: buildMajorChord('Gb', 2),
+  G: [...buildMajorChord('G', 3), buildSpecialChord('G', specialShapes.G, 0)],
+  'G#': buildMajorChord('G#', 4),
+  Ab: buildMajorChord('Ab', 4),
+};
+
 export const chords = {
-  // --- Acordes com shapes únicos (abertos) ---
-  Am: [{
-    metadata: { name: 'Am', variant: 0, strings: ['x', 'bass', 'open', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 1, corda: 'B' },
-      { text: '2', casa: 2, corda: 'G' },
-      { text: '3', casa: 2, corda: 'D' },
-    ],
-  }],
-  Em: [{
-    metadata: { name: 'Em', variant: 0, strings: ['bass', 'open', 'open', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 2, corda: 'A' },
-      { text: '2', casa: 2, corda: 'D' },
-    ],
-  },
-  ...buildChord('Em', [
+  ...majorChords,
+  Am: buildChord('Am', [
+    { template: 'Am', fret: 0 },
+  ]),
+  Em: buildChord('Em', [
+    { template: 'Em', fret: 0 },
     { template: 'Am', fret: 7 },
     { template: 'Em', fret: 12 },
     { template: 'Dm', fret: 14 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
-  E: [{
-    metadata: { name: 'E', variant: 0, strings: ['bass', 'open', 'open', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 1, corda: 'G' },
-      { text: '2', casa: 2, corda: 'A' },
-      { text: '3', casa: 2, corda: 'D' },
-    ],
-  }],
-  F: buildChord('F', [
-    { template: 'E', fret: 1 },
-    { template: 'G', fret: 10 },
-    { template: 'D', fret: 3 },
-    { template: 'A', fret: 8 },
   ]),
-  'F#': buildChord('F#', [
-    { template: 'E', fret: 2 },
-    { template: 'G', fret: 11 },
-    { template: 'D', fret: 4 },
-    { template: 'A', fret: 9 },
-  ]),
-  'G#': buildChord('G#', [
-    { template: 'E', fret: 4 },
-    { template: 'G', fret: 1 },
-    { template: 'D', fret: 6 },
-    { template: 'A', fret: 11 },
-  ]),
-  'A#': buildChord('A#', [
-    { template: 'E', fret: 6 },
-    { template: 'G', fret: 3 },
-    { template: 'D', fret: 8 },
-    { template: 'A', fret: 1 },
-  ]),
-  B: buildChord('B', [
-    { template: 'E', fret: 7 },
-    { template: 'G', fret: 4 },
-    { template: 'D', fret: 9 },
-    { template: 'A', fret: 2 },
-  ]),
-  'C#': buildChord('C#', [
-    { template: 'E', fret: 9 },
-    { template: 'G', fret: 6 },
-    { template: 'D', fret: 11 },
-    { template: 'A', fret: 4 },
-  ]),
-  'F/C': [{
-    metadata: {
-      name: 'F/C',
-      variant: 0,
-      strings: ['x', 'bass', 'open', 'open', 'open', 'x']
-    },
-    shape: [
-      { text: '1', casa: 1, corda: 'B' },
-      { text: '2', casa: 2, corda: 'G' },
-      { text: '4', casa: 3, corda: 'D' },
-      { text: '3', casa: 3, corda: 'A' },
-    ],
-  },
-  {
-    metadata: {
-      name: 'F/C',
-      variant: 1,
-      strings: ['x', 'bass', 'x', 'open', 'open', 'open']
-    },
-    shape: [
-      { text: '3', casa: 5, corda: 'e' },
-      { text: '4', casa: 6, corda: 'B' },
-      { text: '2', casa: 5, corda: 'G' },
-      { text: '1', casa: 3, corda: 'A' },
-    ],
-  }],
-  A: [
-    {
-      metadata: { name: 'A', variant: 0, strings: ['x', 'bass', 'open', 'open', 'open', 'open'] },
-      shape: [
-        { text: '1', casa: 2, corda: 'D' },
-        { text: '2', casa: 2, corda: 'G' },
-        { text: '3', casa: 2, corda: 'B' },
-      ],
-    },
-    {
-      metadata: { name: 'A', variant: 1, strings: ['x', 'bass', 'open', 'open', 'open', 'open'] },
-      shape: [
-        { type: 'bar', casa: 2, cordaInicio: 'B', cordaFim: 'D' },
-      ],
-    },
-    ...buildChord('A', [
-      { template: 'E', fret: 5 },
-      { template: 'G', fret: 2 },
-      { template: 'D', fret: 7 },
-      { template: 'A', fret: 12 },
-    ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 2 } })),
-  ],
-  D: [{
-    metadata: { name: 'D', variant: 0, strings: ['x', 'x', 'bass', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 2, corda: 'G' },
-      { text: '2', casa: 2, corda: 'e' },
-      { text: '3', casa: 3, corda: 'B' },
-    ],
-  },
-  ...buildChord('D', [
-    { template: 'E', fret: 10 },
-    { template: 'G', fret: 7 },
-    { template: 'D', fret: 12 },
-    { template: 'A', fret: 5 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
-  'D#': [{
-    metadata: { name: 'D#', variant: 0, strings: ['x', 'x', 'bass', 'open', 'open', 'open'] },
-    shape: [
-      { type: 'bar', casa: 1, cordaFim: 'D', cordaInicio: 'e' },
-      { text: '3', casa: 3, corda: 'e' },
-      { text: '4', casa: 4, corda: 'B' },
-      { text: '2', casa: 3, corda: 'G' },
-    ],
-  }],
-  Dm: [{
-    metadata: { name: 'Dm', variant: 0, strings: ['x', 'x', 'bass', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 1, corda: 'e' },
-      { text: '2', casa: 2, corda: 'G' },
-      { text: '3', casa: 3, corda: 'B' },
-    ],
-  },
-  ...buildChord('Dm', [
+  Dm: buildChord('Dm', [
+    { template: 'Dm', fret: 0 },
     { template: 'Am', fret: 5 },
     { template: 'Em', fret: 10 },
     { template: 'Dm', fret: 12 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
-  G: [{
-    metadata: { name: 'G', variant: 0, strings: ['bass', 'open', 'open', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 2, corda: 'A' },
-      { text: '2', casa: 3, corda: 'E' },
-      { text: '3', casa: 3, corda: 'e' },
-    ],
-  },
-  ...buildChord('G', [
-    { template: 'E', fret: 3 },
-    { template: 'G', fret: 12 },
-    { template: 'D', fret: 5 },
-    { template: 'A', fret: 10 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
-  C: [{
-    metadata: { name: 'C', variant: 0, strings: ['x', 'bass', 'open', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 1, corda: 'B' },
-      { text: '2', casa: 2, corda: 'D' },
-      { text: '3', casa: 3, corda: 'A' },
-    ],
-  },
-  ...buildChord('C', [
-    { template: 'E', fret: 8 },
-    { template: 'G', fret: 5 },
-    { template: 'D', fret: 10 },
-    { template: 'A', fret: 3 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
-
-  // --- Acordes menores gerados a partir dos templates ---
+  ]),
   Bm: [{
     metadata: { name: 'Bm', variant: 0, strings: ['x', 'bass', 'open', 'open', 'open', 'open'] },
     shape: [
       { type: 'bar', casa: 2, cordaFim: 'A', cordaInicio: 'e' },
-      { text: '1', casa: 3, corda: 'B' },
-      { text: '2', casa: 4, corda: 'G' },
-      { text: '3', casa: 4, corda: 'D' },
+      { text: '2', casa: 3, corda: 'B' },
+      { text: '3', casa: 4, corda: 'G' },
+      { text: '4', casa: 4, corda: 'D' },
     ],
   },
   ...buildChord('Bm', [
@@ -344,32 +398,15 @@ export const chords = {
     { template: 'Am', fret: 9 },
     { template: 'Dm', fret: 4 },
   ]),
-
-  // --- Acordes com 9ª gerados a partir dos shapes D9, E9 e A9 ---
-  D9: [{
-    metadata: { name: 'D9', variant: 0, strings: ['x', 'x', 'bass', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 2, corda: 'G' },
-      { text: '2', casa: 3, corda: 'B' },
-    ],
-  },
-  ...buildChord('D9', [
+  D9: buildChord('D9', [
+    { template: 'D9', fret: 0 },
     { template: 'A9', fret: 5 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
-  E9: [{
-    metadata: { name: 'E9', variant: 0, strings: ['bass', 'open', 'open', 'open', 'open', 'open'] },
-    shape: [
-      { text: '1', casa: 1, corda: 'G' },
-      { text: '2', casa: 2, corda: 'A' },
-      { text: '3', casa: 4, corda: 'D' },
-    ],
-  },
-  ...buildChord('E9', [
+  ]),
+  E9: buildChord('E9', [
+    { template: 'E9', fret: 0 },
     { template: 'D9', fret: 2 },
     { template: 'A9', fret: 7 },
-  ]).map((v, i) => ({ ...v, metadata: { ...v.metadata, variant: i + 1 } })),
-  ],
+  ]),
   F9: buildChord('F9', [
     { template: 'E9', fret: 1 },
     { template: 'D9', fret: 3 },
@@ -390,9 +427,11 @@ export const chords = {
     { template: 'D9', fret: 9 },
     { template: 'A9', fret: 2 },
   ]),
-  C9: buildChord('C9', [
+  C9: [...buildChord('C9', [
     { template: 'E9', fret: 8 },
     { template: 'D9', fret: 10 },
     { template: 'A9', fret: 3 },
-  ]),
+  ]), buildSpecialChord('C9', specialShapes.C9, 0)],
+  ...m7Chords,
+  ...maj7SlashChords,
 };

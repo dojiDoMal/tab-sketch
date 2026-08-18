@@ -196,7 +196,6 @@
     color: #aaa;
     display: none;
     max-width: 5rem;
-    margin-top: 24px;
     text-align: center;
     font-size: 0.8rem;
 }
@@ -205,12 +204,146 @@
     display: block;
 }
 
+.tab-sketch-wrapper {
+    position: relative;
+    width: calc(5rem + 16px);
+    height: 186px;
+}
+
 .tab-sketch-container {
-    padding: 16px 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 16px 8px 24px;
     border-radius: 8px;
     width: fit-content;
 }
 
 .tab-sketch-container:hover {
     background-color: color-mix(in srgb, transparent, #fff 8%);
+}
+
+/* Rhythm */
+
+.rhythm-sketch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.rhythm-bpm {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+}
+
+.rhythm-bpm span {
+    opacity: 0.7;
+}
+
+.rhythm-pattern {
+    display: flex;
+    align-items: center;
+    height: 28px;
+}
+
+.rhythm-stroke {
+    width: 16px;
+    height: 16px;
+    text-align: center;
+}
+
+.rhythm-stroke--down {
+    transform: rotate(90deg) scaleX(2);
+}
+
+.rhythm-stroke--up {
+    transform: rotate(-90deg) scaleX(2);
+}
+
+.rhythm-stroke--mute {
+    height: 100%;
+    width: 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.75rem;
+}
+
+.rhythm-stroke--empty {
+    width: 16px;
+    height: 16px;
+}
+
+.rhythm-counter {
+    display: flex;
+}
+
+.rhythm-beat-number {
+    width: 16px;
+    text-align: center;
+}
+
+.rhythm-beat-subdivider {
+    width: 16px;
+    text-align: center;
+    transform: rotate(90deg);
+    opacity: 0.7;
+}
+
+.rhythm-sketch-container {
+    padding: 16px 8px;
+}
+
+/* Lyrics */
+
+.lyrics-sketch {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    gap: 4px;
+}
+
+.lyrics-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: flex-end;
+}
+
+.lyrics-segment {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.lyrics-chord {
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-height: 1.2em;
+    white-space: nowrap;
+}
+
+.lyrics-chord-group {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    min-height: 1.2em;
+    white-space: nowrap;
+}
+
+.lyrics-chord--empty {
+    visibility: hidden;
+}
+
+.lyrics-text {
+    font-size: 1rem;
+    white-space: pre;
+}
+
+.lyrics-sketch-container {
+    padding: 16px 8px;
 }
