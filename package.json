@@ -1,6 +1,6 @@
 {
   "name": "tab-sketch",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.1",
   "description": "Simple HTML/CSS guitar chord diagram renderer",
   "type": "module",
   "main": "src/index.js",
@@ -36,13 +36,13 @@
     "@storybook/react": "8.6.18",
     "@storybook/react-vite": "8.6.18",
     "@storybook/test": "8.6.18",
-    "@vitejs/plugin-react": "^4.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "4.3.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "storybook": "8.6.18"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": "18.0.0",
+    "react-dom": "18.0.0"
   }
 }
