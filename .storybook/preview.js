@@ -1,6 +1,6 @@
 import '../src/styles.css';
 
-/** @type { import('@storybook/html').Preview } */
+/** @type { import('@storybook/react').Preview } */
 const preview = {
   parameters: {
     backgrounds: {

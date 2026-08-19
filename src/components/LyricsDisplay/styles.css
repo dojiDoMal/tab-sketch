@@ -1,0 +1,87 @@
+/* Lyrics */
+
+.lyrics-sketch {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    gap: 4px;
+}
+
+.lyrics-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: flex-end;
+}
+
+.lyrics-segment {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.lyrics-chord {
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-height: 1.2em;
+    white-space: nowrap;
+}
+
+.lyrics-chord-group {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    min-height: 1.2em;
+    white-space: nowrap;
+}
+
+.lyrics-chord--empty {
+    visibility: hidden;
+}
+
+.lyrics-text {
+    font-size: 1rem;
+    white-space: pre;
+}
+
+.lyrics-sketch-container {
+    padding: 16px 8px;
+}
+
+/* Lyrics chord popup */
+
+.lyrics-chord {
+    cursor: pointer;
+}
+
+.lyrics-chord-popup {
+    padding: 1px;
+    padding-bottom: 1px;
+    border-radius: 10px;
+    background-color: color-mix(in srgb, transparent, #333 50%);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    position: relative;
+    backdrop-filter: blur(20px);
+}
+
+.lyrics-chord-popup::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #333;
+}
+
+/* Force hover state on chord diagram inside popup */
+.lyrics-chord-popup .tab-sketch-container {
+    background-color: color-mix(in srgb, transparent, #fff 8%);
+}
+
+.lyrics-chord-popup .tuning-info {
+    display: block;
+}

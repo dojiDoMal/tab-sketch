@@ -7,6 +7,7 @@
   "module": "src/index.js",
   "exports": {
     ".": "./src/index.js",
+    "./react": "./src/components/index.jsx",
     "./chords": "./src/chords.js",
     "./styles.css": "./src/styles.css"
   },
@@ -27,12 +28,21 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "storybook": "8.6.18",
+    "@storybook/addon-essentials": "8.6.18",
+    "@storybook/addon-interactions": "8.6.18",
+    "@storybook/blocks": "8.6.18",
     "@storybook/html": "8.6.18",
     "@storybook/html-vite": "8.6.18",
-    "@storybook/addon-essentials": "8.6.18",
-    "@storybook/blocks": "8.6.18",
+    "@storybook/react": "8.6.18",
+    "@storybook/react-vite": "8.6.18",
     "@storybook/test": "8.6.18",
-    "@storybook/addon-interactions": "8.6.18"
+    "@vitejs/plugin-react": "^4.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "storybook": "8.6.18"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   }
 }

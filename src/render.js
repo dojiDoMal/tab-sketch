@@ -223,4 +223,4 @@ export function renderChord(container, chordData, options = {}) {
  * Creates the fretboard HTML string (useful for SSR or static rendering).
  * @returns {string} The HTML string for an empty fretboard
  */
-export { createFretboardHTML };
+export { createFretboardHTML, transposeChord };
