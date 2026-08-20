@@ -32,3 +32,31 @@ export const RhythmDisplayVariations = {
         </Section>
     ),
 };
+
+export const RhythmDisplayWithoutBpmLabel = {
+    render: () => (
+        <Section bpm={72}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <RhythmDisplay pattern="D--UXUD--UDUXUDU" showBpmLabel={false} />
+                <RhythmDisplay pattern="D--UXUD--UDUXUDU" showBpmLabel />
+            </div>
+        </Section>
+    ),
+};
+
+export const RhythmDisplayDensity = {
+    render: () => (
+        <Section bpm={72}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <div>
+                    <p style={{ color: '#999', marginBottom: '8px', fontSize: '0.8rem' }}>sem dense (padrão — full width)</p>
+                    <RhythmDisplay pattern="D--UXUD--UDUXUDU" />
+                </div>
+                <div>
+                    <p style={{ color: '#999', marginBottom: '8px', fontSize: '0.8rem' }}>dense (fit-content)</p>
+                    <RhythmDisplay pattern="D--UXUD--UDUXUDU" dense />
+                </div>
+            </div>
+        </Section>
+    ),
+};

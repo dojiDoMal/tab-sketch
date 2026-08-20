@@ -1,0 +1,168 @@
+/* RhythmEditor */
+
+.rhythm-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.rhythm-editor-bpm {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+}
+
+.rhythm-editor-bpm span {
+    opacity: 0.7;
+}
+
+.rhythm-editor-pattern {
+    display: flex;
+    align-items: center;
+    height: 28px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.rhythm-editor-stroke {
+    position: relative;
+    width: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    border-radius: 4px;
+    transition: transform 0.15s, opacity 0.15s;
+}
+
+.rhythm-editor-stroke::before {
+    content: '';
+    height: 32px;
+    position: absolute;
+    inset: -8px;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+}
+
+.rhythm-editor-stroke:hover::before {
+    background-color: #333;
+
+}
+
+.rhythm-editor-stroke:active {
+    cursor: grabbing;
+}
+
+/* Dragging state — the element being dragged */
+.rhythm-editor-stroke--dragging {
+    opacity: 0.4;
+    transform: scale(0.9);
+}
+
+/* Drop target indicator */
+.rhythm-editor-stroke--drag-over::before {
+    background-color: #333;
+}
+
+/* Stroke content styles */
+.rhythm-editor-stroke-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rhythm-editor-stroke--down {
+    transform: rotate(90deg) scaleX(2);
+}
+
+.rhythm-editor-stroke--up {
+    transform: rotate(-90deg) scaleX(2);
+    margin-left: -3px;
+}
+
+.rhythm-editor-stroke-mute {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.75rem;
+    align-items: center;
+    line-height: 0.7;
+    z-index: 9;
+}
+
+.rhythm-editor-stroke-rest {
+    opacity: 0.5;
+}
+
+/* Beat counter */
+.rhythm-editor-counter {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.rhythm-editor-beat-number {
+    width: 16px;
+    text-align: center;
+}
+
+.rhythm-editor-beat-subdivider {
+    width: 16px;
+    text-align: center;
+    transform: rotate(90deg);
+    opacity: 0.7;
+}
+
+/* Stroke palette */
+.rhythm-editor-palette {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.rhythm-editor-palette-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    cursor: grab;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: color-mix(in srgb, transparent, #fff 10%);
+    transition: background-color 0.2s, transform 0.15s;
+}
+
+.rhythm-editor-palette-item:hover {
+    background-color: color-mix(in srgb, transparent, #fff 18%);
+}
+
+.rhythm-editor-palette-item:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+/* Remove drop zone */
+.rhythm-editor-remove-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 0;
+    border-radius: 4px;
+    background-color: transparent;
+    outline: 1px dashed var(--background-danger-2, #8f191e);
+    color: var(--background-danger-2, #8f191e);
+    font-size: 0.75rem;
+    transition: background-color 0.15s, outline-color 0.15s, color 0.15s;
+    cursor: default;
+}
+
+.rhythm-editor-remove-zone--hover {
+    background-color: color-mix(in srgb, transparent, var(--background-danger-2, #8f191e) 15%);
+    outline-style: solid;
+    outline-width: 2px;
+    color: #fff;
+}

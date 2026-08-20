@@ -12,9 +12,11 @@
     "./styles.css": "./src/styles.css"
   },
   "files": [
-    "src"
+    "src",
+    "!src/stories"
   ],
   "scripts": {
+    "pack": "npm pack",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -42,7 +44,7 @@
     "storybook": "8.6.18"
   },
   "peerDependencies": {
-    "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   }
 }

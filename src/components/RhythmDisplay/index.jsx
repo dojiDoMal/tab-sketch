@@ -46,8 +46,10 @@ function parsePattern(patternStr) {
  * @param {string} props.pattern - Pattern string (e.g. "D--UXUD--UDUXUD")
  * @param {[number, number]} [props.timeSignature=[4,4]] - Time signature
  * @param {number} [props.bpm] - Override bpm from Section context
+ * @param {boolean} [props.showBpmLabel=true] - Whether to display the BPM label
+ * @param {boolean} [props.dense=false] - When true, uses fit-content width instead of full width
  */
-export function RhythmDisplay({ pattern, timeSignature = [4, 4], bpm }) {
+export function RhythmDisplay({ pattern, timeSignature = [4, 4], bpm, showBpmLabel = true, dense = false }) {
   const containerRef = useRef(null);
   const section = useSectionContext();
 
@@ -62,8 +64,10 @@ export function RhythmDisplay({ pattern, timeSignature = [4, 4], bpm }) {
       bpm: effectiveBpm || 120,
       timeSignature,
       pattern: parsedPattern,
+      showBpmLabel,
+      dense,
     });
-  }, [pattern, timeSignature, effectiveBpm]);
+  }, [pattern, timeSignature, effectiveBpm, showBpmLabel, dense]);
 
   return <div ref={containerRef} />;
 }

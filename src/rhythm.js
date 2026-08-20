@@ -63,13 +63,15 @@ function createBeatCounterHTML(beats, subdivisionsPerBeat) {
  * @param {number} rhythmData.bpm - Beats per minute
  * @param {[number, number]} rhythmData.timeSignature - Time signature as [beats, noteValue], e.g. [4, 4]
  * @param {string[]} rhythmData.pattern - Array of stroke types: 'D' | 'U' | 'X' | '_'
+ * @param {boolean} [rhythmData.showBpmLabel=true] - Whether to display the BPM label
+ * @param {boolean} [rhythmData.dense=false] - When true, uses fit-content width instead of full width
  */
 export function renderRhythm(container, rhythmData) {
-  const { bpm, timeSignature, pattern } = rhythmData;
+  const { bpm, timeSignature, pattern, showBpmLabel = true, dense = false } = rhythmData;
   const [beats, noteValue] = timeSignature;
   const subdivisionsPerBeat = pattern.length / beats;
 
-  const bpmHTML = `<div class="rhythm-bpm"><span>${bpm} bpm</span></div>`;
+  const bpmHTML = showBpmLabel ? `<div class="rhythm-bpm"><span>${bpm} bpm</span></div>` : '';
 
   const strokesHTML = pattern.map((stroke) => createStrokeHTML(stroke)).join('');
   const patternRowHTML = `<div class="rhythm-pattern">${strokesHTML}</div>`;
@@ -77,8 +79,10 @@ export function renderRhythm(container, rhythmData) {
   const counterHTML = createBeatCounterHTML(beats, subdivisionsPerBeat);
   const counterRowHTML = `<div class="rhythm-counter">${counterHTML}</div>`;
 
+  const denseClass = dense ? ' rhythm-sketch--dense' : '';
+
   container.innerHTML = `
-    <div class="rhythm-sketch">
+    <div class="rhythm-sketch${denseClass}">
       ${bpmHTML}
       ${patternRowHTML}
       ${counterRowHTML}
@@ -95,11 +99,11 @@ export function renderRhythm(container, rhythmData) {
  * @returns {string} HTML string
  */
 export function createRhythmHTML(rhythmData) {
-  const { bpm, timeSignature, pattern } = rhythmData;
+  const { bpm, timeSignature, pattern, showBpmLabel = true, dense = false } = rhythmData;
   const [beats] = timeSignature;
   const subdivisionsPerBeat = pattern.length / beats;
 
-  const bpmHTML = `<div class="rhythm-bpm"><span>${bpm} bpm</span></div>`;
+  const bpmHTML = showBpmLabel ? `<div class="rhythm-bpm"><span>${bpm} bpm</span></div>` : '';
 
   const strokesHTML = pattern.map((stroke) => createStrokeHTML(stroke)).join('');
   const patternRowHTML = `<div class="rhythm-pattern">${strokesHTML}</div>`;
@@ -107,8 +111,10 @@ export function createRhythmHTML(rhythmData) {
   const counterHTML = createBeatCounterHTML(beats, subdivisionsPerBeat);
   const counterRowHTML = `<div class="rhythm-counter">${counterHTML}</div>`;
 
+  const denseClass = dense ? ' rhythm-sketch--dense' : '';
+
   return `
-    <div class="rhythm-sketch">
+    <div class="rhythm-sketch${denseClass}">
       ${bpmHTML}
       ${patternRowHTML}
       ${counterRowHTML}

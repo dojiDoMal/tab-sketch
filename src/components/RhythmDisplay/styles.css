@@ -1,7 +1,6 @@
 /* Rhythm */
 
 .rhythm-sketch {
-    width: fit-content;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,6 +23,8 @@
     display: flex;
     align-items: center;
     height: 28px;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .rhythm-stroke {
@@ -58,6 +59,8 @@
 
 .rhythm-counter {
     display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .rhythm-beat-number {
@@ -74,4 +77,15 @@
 
 .rhythm-sketch-container {
     padding: 16px 8px;
+}
+
+/* Dense modifier — compact fit-content width */
+.rhythm-sketch--dense {
+    width: fit-content;
+}
+
+.rhythm-sketch--dense .rhythm-pattern,
+.rhythm-sketch--dense .rhythm-counter {
+    width: auto;
+    justify-content: flex-start;
 }
