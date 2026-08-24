@@ -155,7 +155,6 @@
     background-color: transparent;
     outline: 1px dashed var(--background-danger-2, #8f191e);
     color: var(--background-danger-2, #8f191e);
-    font-size: 0.75rem;
     transition: background-color 0.15s, outline-color 0.15s, color 0.15s;
     cursor: default;
 }

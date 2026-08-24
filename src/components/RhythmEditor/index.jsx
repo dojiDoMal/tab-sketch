@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { useSectionContext } from '../../contexts/SectionContext.jsx';
 import "./styles.css";
 
@@ -158,8 +158,10 @@ function StrokePalette({ onDragStart, onDragEnd }) {
  * @param {boolean} [props.showBpmLabel=true] - Whether to display the BPM label
  * @param {boolean} [props.showPalette=true] - Whether to show the stroke palette
  * @param {function} [props.onPatternChange] - Callback fired with the new pattern string after edit
+ * @param {function} [props.onChange] - Alias for onPatternChange; fired with the new pattern string after edit
+ * @param {React.Ref} ref - Exposes an imperative `clear()` method to reset the pattern from outside
  */
-export function RhythmEditor({
+export const RhythmEditor = forwardRef(function RhythmEditor({
   pattern,
   timeSignature = [4, 4],
   subdivisionsPerBeat = 4,
@@ -167,7 +169,8 @@ export function RhythmEditor({
   showBpmLabel = true,
   showPalette = true,
   onPatternChange,
-}) {
+  onChange,
+}, ref) {
   const section = useSectionContext();
   const effectiveBpm = bpm ?? section.bpm;
 
@@ -212,10 +215,43 @@ export function RhythmEditor({
   // --- Helper to commit a new strokes array ---
   const commitStrokes = useCallback((newStrokes) => {
     setStrokes(newStrokes);
+    const serialized = serializePattern(newStrokes);
     if (onPatternChange) {
-      onPatternChange(serializePattern(newStrokes));
+      onPatternChange(serialized);
     }
-  }, [onPatternChange]);
+    if (onChange) {
+      onChange(serialized);
+    }
+  }, [onPatternChange, onChange]);
+
+  // --- Imperative handle: lets a parent reset the pattern from an external control ---
+  useImperativeHandle(ref, () => ({
+    /**
+     * Clears the current pattern, resetting every slot to rest.
+     * Fires onChange / onPatternChange with the emptied pattern.
+     */
+    clear() {
+      commitStrokes(createEmptyPattern(timeSignature, subdivisionsPerBeat));
+    },
+    /**
+     * Replaces the current pattern with the given pattern string.
+     * @param {string} nextPattern
+     */
+    setPattern(nextPattern) {
+      const parsed = parsePattern(nextPattern || '');
+      const next = parsed.length >= totalSlots
+        ? parsed.slice(0, totalSlots)
+        : [...parsed, ...Array(totalSlots - parsed.length).fill('_')];
+      commitStrokes(next);
+    },
+    /**
+     * Returns the current pattern as a string.
+     * @returns {string}
+     */
+    getPattern() {
+      return serializePattern(strokes);
+    },
+  }), [commitStrokes, timeSignature, subdivisionsPerBeat, totalSlots, strokes]);
 
   // --- Pattern slot drag handlers (swap between slots) ---
   const handleDragStart = useCallback((index) => {
@@ -351,4 +387,4 @@ export function RhythmEditor({
       )}
     </div>
   );
-}
+});
