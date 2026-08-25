@@ -208,10 +208,11 @@ export function renderChord(container, chordData, options = {}) {
     const tuningText = `${realChord} com forma de ${shapeName}`;
     //tuningLabel.innerHTML = `<b>${realChord}</b> com forma de <b>${shapeName}</b>`;
     tuningLabel.innerHTML = `forma de <b>${shapeName}</b>`;
-    tuningLabel.style.marginBottom = '8px'
+    tuningLabel.classList.add('tuning-info--active');
     inner.setAttribute('title', tuningText);
   } else {
     tuningLabel.textContent = '';
+    tuningLabel.classList.remove('tuning-info--active');
     inner.removeAttribute('title');
   }
 

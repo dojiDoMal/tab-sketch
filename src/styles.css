@@ -2,6 +2,13 @@
     font-family: sans-serif;
 }
 
+/* Desativa o scroll anchoring do navegador. Sem isso, passar o mouse sobre
+   um ChordDisplay parcialmente fora da tela (com scroll) fazia o navegador
+   reajustar o scrollTop e "empurrar" os demais para cima. */
+html {
+    overflow-anchor: none;
+}
+
 :root {
     --purple-1: #766ed7;
     --purple-2: #7d76ce;

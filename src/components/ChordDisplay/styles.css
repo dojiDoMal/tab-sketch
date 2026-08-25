@@ -57,7 +57,7 @@
     inset: 0;
     left: -1px;
     right: -1px;
-    background: linear-gradient(to bottom, transparent, var(--tab-sketch-bg, #333));
+    background: linear-gradient(to bottom, transparent, #000000aa);
     pointer-events: none;
 }
 
@@ -67,7 +67,7 @@
     left: -1px;
     right: -1px;
     height: 10px;
-    background: linear-gradient(to top, transparent, var(--tab-sketch-bg, #333));
+    background: linear-gradient(to top, transparent, #000000aa);
     pointer-events: none;
     z-index: 1;
 }
@@ -80,6 +80,7 @@
 .tab-sketch .label {
     position: absolute;
     background-color: white;
+    color: black;
     border-radius: 100px;
     font-size: 9px;
     font-weight: 700;
@@ -189,21 +190,34 @@
 }
 
 .tab-sketch .tuning-info {
-    color: #aaa;
+    /* Sem tuning info não ocupa espaço nenhum entre o título e o fretboard. */
     display: none;
+}
+
+.tab-sketch .tuning-info--active {
+    color: #aaa;
     max-width: 5rem;
     text-align: center;
     font-size: 0.8rem;
+    /* Só aparece (e ocupa espaço) no hover. O scroll jump que isso poderia
+       causar é evitado pelo overflow-anchor: none no wrapper/html. */
+    display: none;
+    pointer-events: none;
 }
 
-.tab-sketch-container:hover .tuning-info {
+.tab-sketch-container:hover .tuning-info--active {
     display: block;
+    margin-bottom: 8px;
 }
 
 .tab-sketch-wrapper {
     position: relative;
     width: calc(5rem + 16px);
     height: 186px;
+    /* Impede que o browser "ancore" o scroll neste item quando o :hover
+       muda seu estilo, o que fazia o conjunto pular ao passar o mouse
+       sobre um chord parcialmente fora da tela. */
+    overflow-anchor: none;
 }
 
 .tab-sketch-container {
