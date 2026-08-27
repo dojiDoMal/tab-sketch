@@ -1,0 +1,237 @@
+/* ──────────────────────────────────────────────────────────────
+   tab-sketch — shared base styles for the chord diagram markup
+   produced by renderChord() (src/render.js).
+
+   This is the single source of truth for the diagram primitives.
+   It is imported by render.js so any component that renders a chord
+   (ChordDisplay, ChordEditor, ChordLib, ...) gets consistent styles.
+
+   Component-specific tweaks (backgrounds, radii, add-button, etc.)
+   live in each component's own styles.css, scoped to that component.
+   ────────────────────────────────────────────────────────────── */
+
+.tab-sketch {
+    width: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-sketch .fretboard {
+    display: flex;
+    flex-direction: column;
+    width: 55px;
+    height: 76px;
+    background-color: #333;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-top: 3px solid white;
+    box-sizing: content-box;
+    position: relative;
+}
+
+.tab-sketch .fretboard--capo {
+    border-top: none;
+}
+
+.tab-sketch .fretboard--offset {
+    border-top: none;
+}
+
+.tab-sketch .casa {
+    border-bottom: 1px solid white;
+    display: flex;
+}
+
+.tab-sketch .casa-last {
+    display: flex;
+    position: relative;
+}
+
+.tab-sketch .corda {
+    background-color: #333;
+    flex: 1;
+    height: 15px;
+    box-sizing: border-box;
+    border-right: 1px solid white;
+}
+
+.tab-sketch .corda-last {
+    background-color: #333;
+    flex: 1;
+    height: 15px;
+}
+
+.tab-sketch .fade {
+    top: 10px;
+    position: absolute;
+    inset: 0;
+    left: -1px;
+    right: -1px;
+    background: linear-gradient(to bottom, transparent, #000000aa);
+    pointer-events: none;
+}
+
+.tab-sketch .fade-top {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    right: -1px;
+    height: 10px;
+    background: linear-gradient(to top, transparent, #000000aa);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.tab-sketch .label-wrapper {
+    display: flex;
+    position: relative;
+}
+
+.tab-sketch .label {
+    position: absolute;
+    background-color: white;
+    color: black;
+    border-radius: 100px;
+    font-size: 9px;
+    font-weight: 700;
+    width: 10px;
+    height: 10px;
+    text-align: center;
+    z-index: 9;
+}
+
+.tab-sketch .label-bar {
+    position: absolute;
+    background-color: white;
+    border-radius: 2px;
+    font-size: 9px;
+    font-weight: 700;
+    height: 6px;
+    text-align: center;
+    z-index: 9;
+}
+
+.tab-sketch .chord-name {
+    color: white;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: center;
+    width: 55px;
+}
+
+.tab-sketch .strings-row {
+    position: relative;
+    width: 55px;
+    height: 8px;
+}
+
+.tab-sketch .capo {
+    display: flex;
+    width: 55px;
+    height: 15px;
+    border: 1px solid white;
+    margin-bottom: 6px;
+    position: relative;
+}
+
+.tab-sketch .capo--first {
+    border-top: 3px solid white;
+}
+
+.tab-sketch .capo-fret {
+    background-color: #333;
+    flex: 1;
+    height: 100%;
+    box-sizing: border-box;
+    border-right: 1px solid white;
+}
+
+.tab-sketch .capo-fret-last {
+    background-color: #333;
+    flex: 1;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.tab-sketch .capo-bar-wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.tab-sketch .capo-number {
+    position: absolute;
+    margin-right: 10px;
+    right: 55px;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+}
+
+.tab-sketch .capo-bar {
+    position: absolute;
+    background-color: white;
+    height: 10px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: -3px;
+    width: 61px;
+}
+
+.tab-sketch .capo-text {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: #333;
+    margin-left: 12px;
+    width: 100%;
+}
+
+.tab-sketch .fret-indicator {
+    position: absolute;
+    left: -16px;
+    top: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    z-index: 1;
+}
+
+.tab-sketch .tuning-info {
+    display: none;
+}
+
+.tab-sketch .tuning-info--active {
+    color: #aaa;
+    max-width: 5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    display: none;
+    pointer-events: none;
+}
+
+.tab-sketch-container:hover .tuning-info--active {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.tab-sketch-wrapper {
+    position: relative;
+    width: calc(5rem + 16px);
+    height: 186px;
+    overflow-anchor: none;
+}
+
+.tab-sketch-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 16px 8px 24px;
+    width: fit-content;
+    border-radius: 8px;
+}

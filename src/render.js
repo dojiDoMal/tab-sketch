@@ -1,3 +1,5 @@
+import './components/tabSketch.css';
+
 const cordas = { e: -5, B: -15, G: -26, D: -37, A: -48, E: -59 };
 const stringPositions = [-1.5, 9.1, 19.8, 30.5, 41.2, 51.9];
 
@@ -169,6 +171,17 @@ function renderStrings(container, strings) {
  *   When set, displays the real sounding chord below the diagram.
  *   Example: tuning=-2 with shape "Bm" shows "Am com forma de Bm".
  * @param {string} [options.titleColor] - Custom color for the chord name title (e.g. '#ff0', 'red').
+ * @param {() => void} [options.onAdd] - When provided, renders an "add" button inside the
+ *   diagram (below the fretboard) that calls this callback on click. Used by ChordLib as a
+ *   drag-free shortcut to add the chord to the editor.
+ * @param {() => void} [options.onPrev] - When provided (alongside onAdd), renders a "previous
+ *   variation" arrow to the left of the add button. Used by ChordLib to cycle chord shapes.
+ * @param {() => void} [options.onNext] - When provided (alongside onAdd), renders a "next
+ *   variation" arrow to the right of the add button.
+ * @param {boolean} [options.canPrev=true] - Whether the previous arrow is enabled.
+ * @param {boolean} [options.canNext=true] - Whether the next arrow is enabled.
+ * @returns {(() => void) | void} A cleanup function when onAdd is set (removes the buttons'
+ *   click listeners); otherwise nothing.
  */
 export function renderChord(container, chordData, options = {}) {
   const capo = options.capo && options.capo > 0 ? options.capo : undefined;
@@ -218,6 +231,63 @@ export function renderChord(container, chordData, options = {}) {
 
   renderStrings(root, chordData.metadata.strings);
   chordData.shape.forEach((item) => createLabel(root, item, fretOffset));
+
+  // Optional "add" button rendered inside the diagram, below the fretboard.
+  // Used by ChordLib as a drag-free shortcut to add the chord.
+  if (typeof options.onAdd === 'function') {
+    const hasPrev = typeof options.onPrev === 'function';
+    const hasNext = typeof options.onNext === 'function';
+
+    // Wrapper holds the optional left/right variation arrows and the add button.
+    const bar = document.createElement('div');
+    bar.className = 'tab-sketch__button-bar';
+
+    const listeners = [];
+    const addListener = (el, handler) => {
+      el.addEventListener('click', handler);
+      listeners.push(() => el.removeEventListener('click', handler));
+    };
+
+    const createArrow = (dir, onClick, enabled) => {
+      const arrowBtn = document.createElement('button');
+      arrowBtn.type = 'button';
+      arrowBtn.className = `tab-sketch__variant-button tab-sketch__variant-button--${dir}`;
+      arrowBtn.title = dir === 'prev' ? 'Variação anterior' : 'Próxima variação';
+      arrowBtn.disabled = !enabled;
+      const span = document.createElement('span');
+      span.textContent = dir === 'prev' ? '\u003c' : '\u003e';
+      arrowBtn.appendChild(span);
+      const handleClick = (e) => {
+        e.stopPropagation();
+        if (arrowBtn.disabled) return;
+        onClick();
+      };
+      addListener(arrowBtn, handleClick);
+      return arrowBtn;
+    };
+
+    if (hasPrev) {
+      bar.appendChild(createArrow('prev', options.onPrev, options.canPrev !== false));
+    }
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tab-sketch__add-button';
+    btn.title = 'Adicionar ao editor';
+    btn.textContent = '+';
+    addListener(btn, (e) => {
+      e.stopPropagation();
+      options.onAdd();
+    });
+    bar.appendChild(btn);
+
+    if (hasNext) {
+      bar.appendChild(createArrow('next', options.onNext, options.canNext !== false));
+    }
+
+    root.appendChild(bar);
+    return () => listeners.forEach((off) => off());
+  }
 }
 
 /**

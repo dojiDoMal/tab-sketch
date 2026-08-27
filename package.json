@@ -3,19 +3,21 @@
   "version": "1.0.0-beta.1",
   "description": "Simple HTML/CSS guitar chord diagram renderer",
   "type": "module",
-  "main": "src/index.js",
-  "module": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "exports": {
-    ".": "./src/index.js",
-    "./react": "./src/components/index.jsx",
-    "./chords": "./src/chords.js",
-    "./styles.css": "./src/styles.css"
+    ".": "./dist/index.js",
+    "./react": "./dist/components/index.js",
+    "./chords": "./dist/chords.js",
+    "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "src",
-    "!src/stories"
+    "dist"
   ],
   "scripts": {
+    "build-dev": "node scripts/build.mjs && npm pack --ignore-scripts",
+    "build-prod": "node scripts/build.mjs --minify && npm pack --ignore-scripts",
+    "prepack": "node scripts/build.mjs",
     "pack": "npm pack",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -39,6 +41,7 @@
     "@storybook/react-vite": "8.6.18",
     "@storybook/test": "8.6.18",
     "@vitejs/plugin-react": "4.3.0",
+    "esbuild": "0.25.12",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "storybook": "8.6.18"

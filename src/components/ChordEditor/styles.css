@@ -1,0 +1,136 @@
+/* ──────────────────────────────────────────────────────────────
+   ChordEditor — component-specific styles.
+   Base diagram styles live in ../tabSketch.css (imported by render.js).
+   ────────────────────────────────────────────────────────────── */
+
+/* Editor diagrams sit on a solid card with a rounded top. */
+.chord-editor .tab-sketch-container {
+    border-radius: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #2c2c2c;
+}
+
+/* ── Add chord button ─────────────────────────────────────────── */
+
+.add-chord {
+    cursor: pointer;
+}
+
+.add-chord .add-chord__container {
+    border-radius: 8px;
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.add-chord .add-chord__content {
+    color: var(--color-white);
+    gap: 16px;
+    height: 100%;
+}
+
+.add-chord__hint {
+    color: var(--color-white);
+    font-size: 0.8rem;
+    text-align: center;
+    opacity: 0.7;
+}
+
+.add-chord__icon {
+    font-size: 27px;
+    border-radius: 100px;
+    border: 2px solid var(--color-white);
+    height: 25px;
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.7;
+}
+
+/* ── Chord editor list + item + grabber ───────────────────────── */
+
+.chord-editor-list {
+    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.chord-editor-item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.chord-editor-item--dragging {
+    opacity: 0.4;
+}
+
+.chord-editor-item--drag-over {
+    box-shadow: 0 0 0 1px var(--color-white);
+}
+
+.chord-editor__grabber {
+    color: var(--color-white);
+    display: flex;
+    justify-content: center;
+    cursor: grab;
+    background-color: #444;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.chord-editor__grabber:active {
+    cursor: grabbing;
+}
+
+.chord-editor__grabber-icon {
+    display: inline-block;
+    transform: rotate(90deg);
+}
+
+/* ── Add chord drop target highlight ─────────────────────────── */
+
+.add-chord--drag-over .add-chord__container {
+    box-shadow: 0 0 0 2px #35aabb;
+}
+
+.add-chord--drag-over .add-chord__icon {
+    opacity: 1;
+    border-color: #35aabb;
+    color: #35aabb;
+}
+
+/* ── Chord editor wrapper ─────────────────────────────────────── */
+
+.chord-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ── Remove drop zone ─────────────────────────────────────────── */
+
+.chord-editor-remove-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 0;
+    border-radius: 4px;
+    background-color: transparent;
+    outline: 1px dashed var(--background-danger-2, #8f191e);
+    color: var(--background-danger-2, #8f191e);
+    font-size: 0.8rem;
+    transition: background-color 0.15s, outline-color 0.15s, color 0.15s;
+    cursor: default;
+}
+
+.chord-editor-remove-zone--hover {
+    background-color: color-mix(in srgb, transparent, var(--background-danger-2, #8f191e) 15%);
+    outline-style: solid;
+    outline-width: 2px;
+    color: #fff;
+}
