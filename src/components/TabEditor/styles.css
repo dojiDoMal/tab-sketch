@@ -1,0 +1,72 @@
+/* Tab editor */
+
+.tab-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+/* The wrapper carries the border/background/padding. A textarea with
+   overflow-x:auto collapses its own padding-right at the end of scrollable
+   content, so we can't rely on textarea padding for right breathing room.
+   Instead the textarea is transparent and padding-free, and this wrapper's
+   padding reserves equal space on both sides — the textarea scrolls INSIDE the
+   already-inset area, so text never touches the visible edge. */
+.tab-editor-input-wrap {
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid var(--border-1, #222a36);
+    border-radius: var(--border-radius, 8px);
+    background-color: var(--input-background, #0d131c);
+}
+
+.tab-editor-input-wrap:focus-within {
+    border-color: var(--color-info-1, #629dd5);
+    box-shadow: 0 0 0 3px var(--color-info-glow, #629dd566);
+}
+
+.tab-editor-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-white, #e0e0e0);
+    font-family: 'Courier New', Consolas, Menlo, Monaco, monospace;
+    font-size: 0.9rem;
+    line-height: 1.15;
+    white-space: pre;
+    overflow-x: auto;
+    tab-size: 2;
+}
+
+.tab-editor-input:focus {
+    outline: none;
+}
+
+.tab-editor-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--border-1, #222a36);
+    border-radius: var(--border-radius, 8px);
+    background-color: var(--background-2, #1c242e);
+    /* min-width:0 lets the flex child shrink instead of overflowing; overflow
+       hidden clips any residual subpixel spill from the monospaced grid. */
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.tab-editor-preview-label {
+    font-family: sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    color: var(--color-white, #e0e0e0);
+}

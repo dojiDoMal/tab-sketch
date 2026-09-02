@@ -1,0 +1,108 @@
+/* Tab (tablature) */
+
+/* Single source of truth for the monospaced stack. Declared on a variable so
+   every text node in the staff can reference it and win over the global
+   `* { font-family: sans-serif }` rule in styles.css, which otherwise targets
+   the inner spans directly and beats inheritance. */
+.tab-display {
+    --tab-font: 'Courier New', Consolas, Menlo, Monaco, monospace;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    color: white;
+}
+
+.tab-display-canvas {
+    width: 100%;
+    min-width: 0;
+    /* Safety net: even if the column math is off by a subpixel, never let the
+       staff bleed past the container edge. */
+    overflow: hidden;
+}
+
+.tab-sketch-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.tab-sketch-tab-container {
+    padding: 12px 8px;
+}
+
+/* One staff = the stacked string rows for one wrapped chunk. */
+.tab-staff {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.tab-row {
+    display: flex;
+    align-items: center;
+    font-family: var(--tab-font);
+    font-size: 0.9rem;
+    line-height: 1.15;
+    white-space: pre;
+    letter-spacing: 0;
+}
+
+/* Force the monospaced font on every text node inside a staff row. This has
+   higher specificity than the global `*` selector, so the inner spans
+   (.tab-cell, .tab-string-label, .tab-cell-pad, ...) stay monospaced. */
+.tab-row,
+.tab-row * {
+    font-family: var(--tab-font);
+}
+
+.tab-string-label {
+    display: inline-block;
+    width: 1ch;
+    text-align: center;
+    opacity: 0.7;
+    user-select: none;
+}
+
+.tab-string-open {
+    display: inline-block;
+    width: 1ch;
+    text-align: center;
+    opacity: 0.5;
+    user-select: none;
+}
+
+.tab-line {
+    display: inline-block;
+    font-family: var(--tab-font);
+    font-size: 0.9rem;
+    white-space: pre;
+}
+
+/* Every cell is exactly one monospaced character wide, so the six string rows
+   line up in a rigid grid regardless of content. */
+.tab-cell {
+    display: inline-block;
+    width: 1ch;
+    text-align: center;
+    white-space: pre;
+}
+
+.tab-cell--note {
+    color: var(--color-info-1, #629dd5);
+    font-weight: 700;
+}
+
+/* Technique markers (h p b r ~ / \ x ...) — distinct from fret numbers. */
+.tab-cell--tech {
+    color: var(--color-white, #e0e0e0);
+    opacity: 0.85;
+}
+
+.tab-cell--filler {
+    opacity: 0.45;
+}
+
+.tab-cell--bar {
+    opacity: 0.5;
+}
