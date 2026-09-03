@@ -1,6 +1,6 @@
 {
   "name": "tab-sketch",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Simple HTML/CSS guitar chord diagram renderer",
   "type": "module",
   "main": "dist/index.js",
@@ -17,7 +17,7 @@
   "scripts": {
     "build-dev": "node scripts/build.mjs && npm pack --ignore-scripts",
     "build-prod": "node scripts/build.mjs --minify && npm pack --ignore-scripts",
-    "prepack": "node scripts/build.mjs",
+    "prepack": "node scripts/build.mjs --minify",
     "pack": "npm pack",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

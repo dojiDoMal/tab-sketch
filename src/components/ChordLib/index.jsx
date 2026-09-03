@@ -95,7 +95,8 @@ function ChordLibItem({ chord, shapeVariant = 0, capo, tuning, titleColor, onAdd
 
 /**
  * ChordLib — a paginated library of all available chords.
- * Displays PAGE_SIZE items (3 columns × 2 rows) at a time, with a "show more" button.
+ * Displays PAGE_SIZE items at a time in a responsive grid (up to 3 columns,
+ * collapsing to 2 or 1 on narrower screens), with a "show more" button.
  *
  * Each item is draggable; drop it on the ChordEditor's AddChordButton to add it.
  *
